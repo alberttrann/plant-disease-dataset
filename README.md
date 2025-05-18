@@ -3,7 +3,7 @@ The new dataset is here: https://huggingface.co/datasets/minhhungg/plant-disease
 
 Since it only consists of two columns image and class, i decided to spice it up with more detailed, dynamic content, so the tuned model can have more "depth" in its answer rather than just providing simple lablels 
 
-First, upload all of the train and valid folders to gemini, and convert them all to jsonl format for Google Cloud finetuning
+First, upload all of the train and valid folders to a bucket on Google Cloud Storage, and convert them all to jsonl format for Google Cloud finetuning
 ```
 #Upload dataset and convert to google's jsonl format template
 import os
