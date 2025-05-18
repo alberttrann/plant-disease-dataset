@@ -686,10 +686,7 @@ Then the batch-label generation for validation split still uses same script for 
 Then goes the tuning process, with 5 epochs, 0.6 learning rate multiplier and an adapter size of 8. Here is what was going on 
 ![Screenshot 2025-05-18 185725](https://github.com/user-attachments/assets/b501a692-ccb4-4e17-b65b-9f9d9d33ceae)
 
-I also did some eval, and here was the result:
-![Screenshot 2025-05-05 090554](https://github.com/user-attachments/assets/5e0955af-d6e5-409e-8d25-83b5b5a52e2f)
-
-This is eval script:
+This is the script for eval:
 ```
 import os
 import base64
@@ -1189,6 +1186,9 @@ Provide your evaluation in JSON format based on the system instructions."""
 if __name__ == "__main__":
     evaluate_model_with_judge()
 ```
+
+Here was the classification report:
+![Screenshot 2025-05-05 090554](https://github.com/user-attachments/assets/5e0955af-d6e5-409e-8d25-83b5b5a52e2f)
 
 This was much better than the previous attempt of tuning(on the original dataset), with 1 epoch, adapter size 8, LR multiplier 0.5.
 ![Screenshot 2025-05-04 195019](https://github.com/user-attachments/assets/d1f81fea-6871-42a9-8489-65c13f5d6d62)
