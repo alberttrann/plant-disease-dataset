@@ -1,4 +1,5 @@
 The original dataset is at https://huggingface.co/datasets/Hemg/new-plant-diseases-dataset
+The new dataset is here: https://huggingface.co/datasets/minhhungg/plant-disease-dataset
 
 Since it only consists of two columns image and class, i decided to spice it up with more detailed, dynamic content, so the tuned model can have more "depth" in its answer rather than just providing simple lablels 
 
