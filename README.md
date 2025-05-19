@@ -690,7 +690,7 @@ Then goes the tuning process, with 5 epochs, 0.6 learning rate multiplier and an
 1. Fraction of Correct Next Step Predictions (Accuracy proxy)
 Starts ~0.63 and increases rapidly to ~0.85–0.87, plateauing.
 
-Good learning curve — shows the model is learning effectively and not overfitting (yet).
+Good learning curve — shows the model is learning effectively and not overfitting.
 
 2. Number of Predictions
 Remains stable between ~30k and 32k across steps.
