@@ -686,6 +686,72 @@ Then the batch-label generation for validation split still uses same script for 
 Then goes the tuning process, with 5 epochs, 0.6 learning rate multiplier and an adapter size of 8. Here is what was going on 
 ![Screenshot 2025-05-18 185725](https://github.com/user-attachments/assets/b501a692-ccb4-4e17-b65b-9f9d9d33ceae)
 
+📊 Training Metrics (Top Row)
+1. Fraction of Correct Next Step Predictions (Accuracy proxy)
+Starts ~0.63 and increases rapidly to ~0.85–0.87, plateauing.
+
+Good learning curve — shows the model is learning effectively and not overfitting (yet).
+
+2. Number of Predictions
+Remains stable between ~30k and 32k across steps.
+
+The spikiness is normal and reflects batch variations.
+
+No signs of data leakage or inconsistent training batches.
+
+3. Total Loss
+Sharp drop from ~1.5 to ~0.4, then flattens — textbook convergence.
+
+Indicates effective loss minimization and no signs of vanishing gradients or instability.
+
+🧪 Validation Metrics (Bottom Row)
+1. Fraction of Correct Next Step Predictions
+Very similar curve to training: climbs quickly to ~0.86–0.87.
+
+Close alignment with training accuracy → no overfitting.
+
+2. Number of Predictions
+Flat and steady at ~30k.
+
+Same as training → balanced validation set.
+
+3. Total Loss
+Drops from ~1.4 to ~0.42 and plateaus.
+
+Slightly higher than training loss (expected).
+
+No divergence → generalization is working well.
+
+⚙️ Hyperparameters Evaluation
+Epochs: 5
+
+Sufficient; loss and accuracy flatten out around step ~1500–2000.
+
+No need to train more unless additional gains are required.
+
+Learning Rate Multiplier: 0.6
+
+Effective — stable training and fast convergence.
+
+Higher might risk overshooting; lower might slow learning.
+
+Adapter Size: 8
+
+A small adapter size, often used in LoRA-style fine-tuning.
+
+Efficient and enough for the scale of the task, given the performance.
+
+If performance needs to be pushed further, adapter size could be increased, but it would come at a memory cost.
+
+🔍 Final Assessment
+Training is successful and well-behaved.
+
+Model converged efficiently and generalizes well, with minimal gap between training and validation performance.
+
+No overfitting or underfitting signs.
+
+A larger adapter size or slightly more training steps might yield small gains, but the current setup is already solid.
+
 This is the script for eval:
 ```
 import os
