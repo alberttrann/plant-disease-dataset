@@ -686,6 +686,72 @@ Then the batch-label generation for validation split still uses same script for 
 Then goes the tuning process, with 5 epochs, 0.6 learning rate multiplier and an adapter size of 8. Here is what was going on 
 ![Screenshot 2025-05-18 185725](https://github.com/user-attachments/assets/b501a692-ccb4-4e17-b65b-9f9d9d33ceae)
 
+📊 Training Metrics (Top Row)
+1. Fraction of Correct Next Step Predictions (Accuracy proxy)
+Starts ~0.63 and increases rapidly to ~0.85–0.87, plateauing.
+
+Good learning curve — shows the model is learning effectively and not overfitting.
+
+2. Number of Predictions
+Remains stable between ~30k and 32k across steps.
+
+The spikiness is normal and reflects batch variations.
+
+No signs of data leakage or inconsistent training batches.
+
+3. Total Loss
+Sharp drop from ~1.5 to ~0.4, then flattens — textbook convergence.
+
+Indicates effective loss minimization and no signs of vanishing gradients or instability.
+
+🧪 Validation Metrics (Bottom Row)
+1. Fraction of Correct Next Step Predictions
+Very similar curve to training: climbs quickly to ~0.86–0.87.
+
+Close alignment with training accuracy → no overfitting.
+
+2. Number of Predictions
+Flat and steady at ~30k.
+
+Same as training → balanced validation set.
+
+3. Total Loss
+Drops from ~1.4 to ~0.42 and plateaus.
+
+Slightly higher than training loss (expected).
+
+No divergence → generalization is working well.
+
+⚙️ Hyperparameters Evaluation
+Epochs: 5
+
+Sufficient; loss and accuracy flatten out around step ~1500–2000.
+
+No need to train more unless additional gains are required.
+
+Learning Rate Multiplier: 0.6
+
+Effective — stable training and fast convergence.
+
+Higher might risk overshooting; lower might slow learning.
+
+Adapter Size: 8
+
+A small adapter size, often used in LoRA-style fine-tuning.
+
+Efficient and enough for the scale of the task, given the performance.
+
+If performance needs to be pushed further, adapter size could be increased, but it would come at a memory cost.
+
+🔍 Final Assessment
+Training is successful and well-behaved.
+
+Model converged efficiently and generalizes well, with minimal gap between training and validation performance.
+
+No overfitting or underfitting signs.
+
+A larger adapter size or slightly more training steps might yield small gains, but the current setup is already solid.
+
 This is the script for eval:
 ```
 import os
@@ -1190,9 +1256,141 @@ if __name__ == "__main__":
 Here was the classification report:
 ![Screenshot 2025-05-05 090554](https://github.com/user-attachments/assets/5e0955af-d6e5-409e-8d25-83b5b5a52e2f)
 
+✅ Overall Performance
+Accuracy: 84.85% — This is good, especially considering class imbalance.
+
+Macro Avg F1-score: 61.75% — Indicates lower performance on less represented classes.
+
+Weighted Avg F1-score: 86.90% — High, due to strong performance on classes with more samples.
+
+🔍 Class-Level Analysis
+🌟 Strong Classes
+These classes have perfect or near-perfect scores:
+
+applecedarrust: F1 = 1.00
+
+applescab: F1 = 1.00
+
+corncommonrust: F1 = 1.00
+
+potatohealthy: F1 = 0.67 (good, though slightly lower recall)
+
+tomatoearlyblight: F1 = 0.73
+
+tomatohealthy: F1 = 1.00
+
+tomatoyellowleafcurlvirus: F1 = 0.83
+
+These show your model has learned well for these categories, especially those with at least 3-4 support samples.
+
+⚠️ Weak/Unlearned Classes
+These have zero scores across precision, recall, and F1, indicating:
+
+The model either never predicted them, or
+
+Predictions were always incorrect.
+
+Classes affected:
+
+black_rot (support: 3)
+
+late_blight (support: 6)
+
+northern_leaf_blight (support: 0 — likely not present in test set)
+
+spider_mites twospotted_spider_mite (support: 0)
+
+tomato_mosaic_virus (support: 0)
+
+These likely need:
+
+More training data
+
+Better representation during tuning
+
+Augmentation or rebalancing
+
+⚖️ Mid-performing Class
+potatoearlyblight (support: 5): F1 = 0.80
+
+Decent, but still has room to improve.
+
+tomatoearlyblight (support: 6): F1 = 0.73
+
+Solid performance, potentially due to enough examples and distinguishable features.
+
+🧠 Interpretation
+The model is biased toward classes with more samples or clearer features.
+
+Low macro average indicates that rare classes are underperforming.
+
+Excellent weighted average and accuracy imply good overall prediction power, but class imbalance skews results.
+
+✅ Recommendations
+Data Augmentation for underrepresented classes like:
+
+black_rot, late_blight, tomato_mosaic_virus, etc.
+
+Class Rebalancing:
+
+Use techniques like oversampling, SMOTE, or weighted loss functions.
+
+Error Analysis:
+
+Examine confusion matrix — where are misclassifications happening?
+
+Few-Shot / Synthetic Data:
+
+Use generative techniques to create synthetic samples if real ones are scarce.
+
+Custom Class Weights in training:
+
+Helps the model focus more on rare classes.
+
 This was much better than the previous attempt of tuning(on the original dataset), with 1 epoch, adapter size 8, LR multiplier 0.5.
 ![Screenshot 2025-05-04 195019](https://github.com/user-attachments/assets/d1f81fea-6871-42a9-8489-65c13f5d6d62)
 ![Screenshot 2025-05-18 190055](https://github.com/user-attachments/assets/ba91052c-57a5-41f9-9cf5-39ae8449957e)
+
+📊 Classification Report Comparison
+Metric	             First Model (better)	Second Model (this one)
+Accuracy	         0.8485 ✅	            0.5455 ❌
+Macro F1-score	     0.6175 ✅	            0.3282 ❌
+Weighted F1-score	 0.8690 ✅	            0.5394 ❌
+
+The first tuning run (higher epoch or different hyperparameters) outperformed this run in every metric, both overall and per class.
+
+Many classes (e.g. potatohealthy, tomatoearlyblight) had 0 recall and precision in the second model.
+
+Even classes like applecedarrust, which had perfect scores earlier, now have reduced recall (0.5) → signs of underfitting.
+
+📈 Training & Validation Metrics Insights
+Training graphs:
+
+Rapid improvement in the "fraction of correct next step preds" early on.
+
+Training loss decreases smoothly toward near-zero – this looks good only in isolation.
+
+Validation graphs:
+
+Validation loss also goes to near-zero.
+
+But the accuracy stalls at ~0.9 very early and plateaus → overfitting risk is low, but there's also no significant generalization improvement.
+
+The model might not be learning meaningful features in just 1 epoch.
+
+🧠 Interpretation
+Key problem in this tuning run:
+
+Too few epochs: The model likely didn’t get enough time to learn good representations.
+
+Adapter size 8 might be too small to carry meaningful updates depending on the model size.
+
+Learning rate multiplier 0.5 might be on the low side — for LoRA or QLoRA, this can cause under-training especially with just 1 epoch.
+
+✅ Recommendation
+Apply class weighting if data is imbalanced.
+
+Use data augmentation for rare classes.
 
 The answers from the 2nd tuned model looks something like this:
 ![dynamic](https://github.com/user-attachments/assets/7657d70c-d6f0-492d-a551-78b842f24a9f)
