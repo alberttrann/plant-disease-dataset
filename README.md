@@ -1353,12 +1353,13 @@ This was much better than the previous attempt of tuning(on the original dataset
 ![Screenshot 2025-05-04 195019](https://github.com/user-attachments/assets/d1f81fea-6871-42a9-8489-65c13f5d6d62)
 ![Screenshot 2025-05-18 190055](https://github.com/user-attachments/assets/ba91052c-57a5-41f9-9cf5-39ae8449957e)
 
+```
 📊 Classification Report Comparison
 Metric	             First Model (better)	Second Model (this one)
 Accuracy	         0.8485 ✅	            0.5455 ❌
 Macro F1-score	     0.6175 ✅	            0.3282 ❌
 Weighted F1-score	 0.8690 ✅	            0.5394 ❌
-
+```
 The first tuning run (higher epoch or different hyperparameters) outperformed this run in every metric, both overall and per class.
 
 Many classes (e.g. potatohealthy, tomatoearlyblight) had 0 recall and precision in the second model.
