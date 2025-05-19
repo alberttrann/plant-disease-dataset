@@ -1360,11 +1360,11 @@ Accuracy	         0.8485 ✅	            0.5455 ❌
 Macro F1-score	     0.6175 ✅	            0.3282 ❌
 Weighted F1-score	 0.8690 ✅	            0.5394 ❌
 ```
-The first tuning run (higher epoch or different hyperparameters) outperformed this run in every metric, both overall and per class.
+The second tuning run (higher epoch or different hyperparameters) outperformed this run in every metric, both overall and per class.
 
-Many classes (e.g. potatohealthy, tomatoearlyblight) had 0 recall and precision in the second model.
+Many classes (e.g. potatohealthy, tomatoearlyblight) had 0 recall and precision in the first model.
 
-Even classes like applecedarrust, which had perfect scores earlier, now have reduced recall (0.5) → signs of underfitting.
+Even classes like applecedarrust, which had perfect scores later, previously only have minimal recall (0.5) → signs of underfitting.
 
 📈 Training & Validation Metrics Insights
 Training graphs:
