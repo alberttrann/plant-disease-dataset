@@ -1,6 +1,8 @@
 The original dataset is at https://huggingface.co/datasets/Hemg/new-plant-diseases-dataset
 The new dataset is here: https://huggingface.co/datasets/minhhungg/plant-disease-dataset
 
+Since the final jsonl file for my altered dataset is too long so I split them in two parts to upload - part 1 and part 2 
+
 Since it only consists of two columns image and class, i decided to spice it up with more detailed, dynamic content, so the tuned model can have more "depth" in its answers rather than just providing simple labels 
 
 First, upload all of the train and valid folders to a bucket on Google Cloud Storage, and convert them all to jsonl format for Google Cloud finetuning
