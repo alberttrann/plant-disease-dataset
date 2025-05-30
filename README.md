@@ -1356,9 +1356,9 @@ This was much better than the previous attempt of tuning(on the original dataset
 ```
 📊 Classification Report Comparison
 Metric	             First Model (better)	Second Model (this one)
-Accuracy	         0.8485 ✅	            0.5455 ❌
-Macro F1-score	     0.6175 ✅	            0.3282 ❌
-Weighted F1-score	 0.8690 ✅	            0.5394 ❌
+Accuracy	             0.8485 ✅	            0.5455 ❌
+Macro F1-score	         0.6175 ✅	            0.3282 ❌
+Weighted F1-score	     0.8690 ✅	            0.5394 ❌
 ```
 The second tuning run (higher epoch or different hyperparameters) outperformed this run in every metric, both overall and per class.
 
